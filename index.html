@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduOS</title>
+    <link rel="icon" type="image/x-icon" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --header-height: 70px;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .os-window {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .app-icon {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: brightness(0.95);
+        }
+        .app-icon:hover {
+            filter: brightness(1.1);
+            transform: translateY(-5px) scale(1.05);
+        }
+        .dock-item {
+            transition: all 0.2s ease;
+        }
+        .dock-item:hover {
+            transform: translateY(-15px) scale(1.2);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(99, 102, 241, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+            }
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.5s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .performance-meter {
+            width: 120px;
+            height: 120px;
+        }
+    </style>
+</head>
+<body class="relative">
+    <!-- OS Header -->
+    <header class="fixed top-0 left-0 right-0 h-[var(--header-height)] bg-gray-900/90 backdrop-blur-md flex items-center px-6 z-50 border-b border-gray-800">
+        <div class="flex items-center">
+            <img src="https://static.vecteezy.com/system/resources/previews/050/738/813/non_2x/education-logo-design-with-book-globe-badge-with-leaves-icon-mascot-logo-design-symbol-for-language-school-vector.jpg" alt="EduOS logo - A futuristic glowing orb with neural network connections" class="w-10 h-10 rounded-full glow pulse-animation">
+            <h1 class="ml-3 text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">EduOS</h1>
+        </div>
+        <div class="ml-auto flex items-center space-x-4">
+            <div class="relative group">
+                <button id="performance-btn" class="flex items-center space-x-2 px-3 py-1 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors">
+                    <svg class="performance-meter" viewBox="0 0 120 120">
+                        <circle class="text-gray-700" stroke-width="8" stroke="currentColor" fill="transparent" r="52" cx="60" cy="60"/>
+                        <circle id="memory-ring" class="progress-ring__circle text-primary" stroke-width="8" stroke-linecap="round" stroke="currentColor" fill="transparent" r="52" cx="60" cy="60"/>
+                    </svg>
+                    <span id="memory-text" class="text-sm font-medium">64%</span>
+                </button>
+                <div class="absolute right-0 mt-2 w-64 os-window p-4 hidden group-hover:block animate__animated animate__fadeIn">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-medium">System Performance</span>
+                        <span class="text-xs text-gray-400">Real-time</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-xs">
+                            <span>Memory Usage</span>
+                            <span id="memory-detail" class="font-mono">1234/2048 MB</span>
+                        </div>
+                        <div class="bg-gray-800 rounded-full h-2 overflow-hidden">
+                            <div id="memory-bar" class="bg-primary h-full rounded-full" style="width: 64%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>CPU Load</span>
+                            <span id="cpu-load" class="font-mono">42%</span>
+                        </div>
+                        <div class="bg-gray-800 rounded-full h-2 overflow-hidden">
+                            <div id="cpu-bar" class="bg-secondary h-full rounded-full" style="width: 42%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>Network</span>
+                            <span id="network-status" class="text-green-400 font-mono">Stable (45ms)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center">
+                <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_1LhsaB.json" background="transparent" speed="1" style="width: 32px; height: 32px;" loop autoplay></lottie-player>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main OS Desktop -->
+    <main class="pt-[var(--header-height)] min-h-screen bg-gradient-to-br from-[#020617] to-[#0f172a] p-6">
+        <!-- App Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 animate__animated animate__fadeIn">
+            <!-- Connected Campus -->
+            <a href="https://excalidraw.com/" target="_blank" class="flex flex-col items-center group">
+                <img src="https://static.vecteezy.com/system/resources/previews/026/630/314/non_2x/whiteboard-icon-symbol-design-illustration-vector.jpg" alt="3D holographic university campus with glowing connections between buildings" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.1s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">White Board</span>
+            </a>
+
+            <!-- Virtual Classroom -->
+            <a href="https://classroom.google.com" target="_blank" class="flex flex-col items-center group">
+                <img src="https://static.vecteezy.com/system/resources/previews/046/804/426/non_2x/google-classroom-icon-logo-symbol-free-png.png" alt="Holographic classroom with floating student avatars and interactive whiteboard" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.2s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">Google Classroom</span>
+            </a>
+
+            <!-- Interactive Whiteboard -->
+            <a href="https://gmail.com" target="_blank" class="flex flex-col items-center group">
+                <img src="https://static.vecteezy.com/system/resources/previews/013/948/544/non_2x/gmail-logo-on-transparent-white-background-free-vector.jpg" alt="Infinity whiteboard with floating equations and 3D molecular models" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.3s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">Gmail</span>
+            </a>
+
+            <!-- Code Academy -->
+            <a href="https://drive.google.com" target="_blank" class="flex flex-col items-center group">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5qkeT1_AAPDyJTekm9iGJutXg0GTYb8a-mg&s" alt="Neon code editor with syntax highlighting and 3D visualizations" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.4s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">Google Drive</span>
+            </a>
+
+            <!-- Science Lab -->
+            <a href="https://youtube.com" target="_blank" class="flex flex-col items-center group">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5WDnUU5bvKG-RQhabLJY2m4rXT1AhbFdiLQ&s" alt="Interactive 3D science lab with molecular models and physics simulations" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.5s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">Youtube</span>
+            </a>
+
+            <!-- Digital Library -->
+            <a href="https://openlibrary.org" target="_blank" class="flex flex-col items-center group">
+                <img src="https://media.istockphoto.com/id/1270155083/vector/blue-e-book-logo-design-vector-sign-of-electronic-book-library-icon-symbol.jpg?s=612x612&w=0&k=20&c=DGwVHcCijit8E62o3S2dqFXM2usLP2AmJoOSnDhsI5M=" alt"Infinite digital bookshelf with augmented reality book previews" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.6s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">Digital Library</span>
+            </a>
+
+            <a href="https://phet.colorado.edu/" target="_blank" class="flex flex-col items-center group">
+                <img src="https://static.vecteezy.com/system/resources/previews/034/204/042/non_2x/bio-chemistry-lab-with-icon-physics-logo-design-template-illustration-very-elegant-and-luxury-free-vector.jpg" alt="3D holographic university campus with glowing connections between buildings" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.1s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">Science Lab</span>
+            </a>
+
+            <a href="https://www.mathspad.co.uk/resources.php?interactives=1" target="_blank" class="flex flex-col items-center group">
+                <img src="https://png.pngtree.com/png-vector/20221120/ourmid/pngtree-mathematics-color-icons-set-mathematical-logo-illustration-vector-png-image_41915596.jpg" alt="Interactive 3D science lab with molecular models and physics simulations" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.5s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">Math Lab</span>
+            </a>
+
+            <a href="https://meet.google.com" target="_blank" class="flex flex-col items-center group">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT92FYwsR7JZyXmpceo3j-KlYcGlcQyRUWQNA&s" alt="Interactive 3D science lab with molecular models and physics simulations" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.5s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">Google Meet</span>
+            </a>
+
+            <a href="https://docs.google.com/document/u/0/?pli=1" target="_blank" class="flex flex-col items-center group">
+                <img src="https://www.alphr.com/wp-content/uploads/2022/06/Screenshot-2023-07-07-103624.png" alt="Interactive 3D science lab with molecular models and physics simulations" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.5s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">Google Docs</span>
+            </a>
+
+            <a href="https://docs.google.com/spreadsheets/u/0/" target="_blank" class="flex flex-col items-center group">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6LOCIkgc4hR8Gdx9ieAqCOPp-0RoVP498Ig&s" alt="Interactive 3D science lab with molecular models and physics simulations" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.5s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">Google Sheets</span>
+            </a>
+
+            <a href="https://docs.google.com/presentation/u/0/" target="_blank" class="flex flex-col items-center group">
+                <img src="https://gqucouwbfxremfdhdosu.supabase.co/storage/v1/object/public/sc-store/1734625699059Google_Slides.webp" alt="Interactive 3D science lab with molecular models and physics simulations" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.5s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">Google Slides</span>
+            </a>
+
+            <a href="https://translate.google.com/?sl=auto&tl=en&op=translate" target="_blank" class="flex flex-col items-center group">
+                <img src="https://brightspot.brightspotcdn.com/dims4/default/d0d2e1f/2147483647/strip/true/crop/400x210+0+45/resize/1200x630!/quality/90/?url=http%3A%2F%2Fbrightspot-brightspot.s3.us-east-1.amazonaws.com%2Fbsp%2Fae%2F00%2Fb59a54254f639035f6688448f8ff%2Fgoogle-translate-promo.jpeg" alt="Interactive 3D science lab with molecular models and physics simulations" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.5s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">Google Translate</span>
+            </a>
+
+             <a href="https://news.google.com/home?hl=en-IN&gl=IN&ceid=IN:en" target="_blank" class="flex flex-col items-center group">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmKSYMtxyHqMX_ZFJAubBJGaB4AESwlZbpeQ&s" alt="Interactive 3D science lab with molecular models and physics simulations" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.5s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">News</span>
+            </a>
+
+            <a href="https://code.org/en-US" target="_blank" class="flex flex-col items-center group">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHgMihi72FRErlwkhh9Khi5BJ5nHnQmTwUrA&s" alt="Interactive 3D science lab with molecular models and physics simulations" 
+                     class="w-20 h-20 object-cover rounded-xl app-icon animate__animated animate__fadeIn slide-up" style="animation-delay: 0.5s">
+                <span class="mt-2 text-sm text-center group-hover:text-primary transition-colors">Coding</span>
+            </a>
+        </div>
+
+        <!-- System Dock -->
+        <div class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-900/70 backdrop-blur-lg px-4 py-2 rounded-full border border-gray-800 shadow-xl z-40">
+            <div class="flex items-center space-x-4">
+                <a href="https://excalidraw.com/" class="dock-item">
+                    <img src="https://static.vecteezy.com/system/resources/previews/026/630/314/non_2x/whiteboard-icon-symbol-design-illustration-vector.jpg" alt="EduOS glowing home button with pulse animation" 
+                         class="w-12 h-12 object-cover rounded-xl glow">
+                </a>
+                
+                <a href="https://classroom.google.com" class="dock-item">
+                    <img src="https://static.vecteezy.com/system/resources/previews/046/804/426/non_2x/google-classroom-icon-logo-symbol-free-png.png" alt="Virtual classroom icon with floating student avatars" 
+                         class="w-12 h-12 object-cover rounded-xl">
+                </a>
+                
+                <a href="https://gmail.com" class="dock-item">
+                    <img src="https://static.vecteezy.com/system/resources/previews/013/948/544/non_2x/gmail-logo-on-transparent-white-background-free-vector.jpg" alt="Code editor icon with syntax highlighting" 
+                         class="w-12 h-12 object-cover rounded-xl">
+                </a>
+                
+                <a href="https://drive.google.com" class="dock-item">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5qkeT1_AAPDyJTekm9iGJutXg0GTYb8a-mg&s" alt="Stack of glowing books icon" 
+                         class="w-12 h-12 object-cover rounded-xl">
+                </a>
+                
+                <a href="https://youtube.com" class="dock-item">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5WDnUU5bvKG-RQhabLJY2m4rXT1AhbFdiLQ&s" alt"Holographic calendar interface with glowing dates" 
+                         class="w-12 h-12 object-cover rounded-xl">
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Floating Helper -->
+    <button id="ai-helper" class="fixed right-6 bottom-6 w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary shadow-lg z-50 flex items-center justify-center group">
+        <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_jimqos21.json" background="transparent" speed="1" style="width: 40px; height: 40px;" hover loop></lottie-player>
+        <span class="absolute top-0 right-0 flex h-4 w-4 -mt-1 -mr-1">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-4 w-4 bg-accent"></span>
+        </span>
+    </button>
+
+    <script>
+        // Performance Monitoring System
+        function updatePerformance() {
+            // Simulate realistic performance metrics
+            const memoryUsage = 30 + Math.random() * 50; // 30-80%
+            const cpuUsage = 10 + Math.random() * 70; // 10-80%
+            const networkLatency = 20 + Math.random() * 60; // 20-80ms
+            
+            // Update memory indicator
+            const memoryRing = document.getElementById('memory-ring');
+            const circumference = 2 * Math.PI * 52;
+            const memoryOffset = circumference - (memoryUsage / 100) * circumference;
+            memoryRing.style.strokeDasharray = circumference + ' ' + circumference;
+            memoryRing.style.strokeDashoffset = memoryOffset;
+            
+            // Update text displays
+            document.getElementById('memory-text').textContent = Math.round(memoryUsage) + '%';
+            document.getElementById('memory-detail').textContent = 
+                Math.round(2048 * (memoryUsage/100)) + '/2048 MB';
+            document.getElementById('memory-bar').style.width = memoryUsage + '%';
+            
+            // Update CPU
+            document.getElementById('cpu-load').textContent = Math.round(cpuUsage) + '%';
+            document.getElementById('cpu-bar').style.width = cpuUsage + '%';
+            
+            // Update network
+            const networkStatus = document.getElementById('network-status');
+            networkStatus.textContent = 
+                (networkLatency < 50 ? 'Excellent' : networkLatency < 100 ? 'Stable' : 'Slow') + 
+                ` (${Math.round(networkLatency)}ms)`;
+            networkStatus.className = 
+                (networkLatency < 50 ? 'text-green-400' : networkLatency < 100 ? 'text-yellow-400' : 'text-red-400') + 
+                ' font-mono';
+        }
+
+        // Update stats every 2 seconds
+        setInterval(updatePerformance, 2000);
+        updatePerformance(); // Initial update
+
+        // AI Helper Animation
+        const aiHelper = document.getElementById('ai-helper');
+        aiHelper.addEventListener('mouseenter', () => {
+            const lottie = aiHelper.querySelector('lottie-player');
+            lottie.setSpeed(1.5);
+        });
+        aiHelper.addEventListener('mouseleave', () => {
+            const lottie = aiHelper.querySelector('lottie-player');
+            lottie.setSpeed(1);
+        });
+        aiHelper.addEventListener('click', () => {
+            window.open('https://copilot.microsoft.com/', '_blank');
+        });
+
+        // Generate realistic memory usage over time
+        let memoryTrend = 0;
+        setInterval(() => {
+            memoryTrend += (Math.random() - 0.5) * 5;
+            memoryTrend = Math.max(-15, Math.min(15, memoryTrend));
+        }, 5000);
+    </script>
+</body>
+</html>
